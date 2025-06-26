@@ -22,9 +22,9 @@
       <div class="product-image-section">
         <img src="shirt1.png" alt="Product Image" class="main-image" />
         <div class="thumbnail-row">
-          <img src="shirt2.png" alt="Thumbnail 1" class="thumbnail selected" />
-          <img src="shirt3.png" alt="Thumbnail 2" class="thumbnail" />
-          <img src="shirt4.png" alt="Thumbnail 3" class="thumbnail" />
+          <img src="shirt2.png" alt="Dark Club Tee" class="thumbnail selected" data-title="Dark Club Tee" data-price="40.00" />
+          <img src="shirt3.png" alt="Crusader Hoodie" class="thumbnail" data-title="Crusader Hoodie" data-price="60.00" />
+          <img src="shirt4.png" alt="Champion Sweater" class="thumbnail" data-title="Champion Sweater" data-price="55.00" />
         </div>
       </div>
 
@@ -75,8 +75,12 @@
         mainImage.src = thumb.src;
         thumbnails.forEach(t => t.classList.remove("selected"));
         thumb.classList.add("selected");
+        document.querySelector(".product-title").textContent = thumb.dataset.title;
+        document.querySelector(".product-price").textContent = `$${parseFloat(thumb.dataset.price).toFixed(2)} USD`;
+        document.querySelector(".product-price").dataset.price = parseFloat(thumb.dataset.price);
       });
     });
+
     const sizeButtons = document.querySelectorAll(".sizes button");
     let selectedSize = null;
 
