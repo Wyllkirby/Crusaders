@@ -426,3 +426,40 @@ body.dark-theme {
   width: 100%;
   max-width: 600px;
 }
+
+.cart-actions {
+  display: flex;
+  justify-content: space-between;
+  max-width: 600px;
+  width: 100%;
+  margin-top: 20px;
+  gap: 10px;
+}
+
+.clear-btn, .checkout-btn {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.clear-btn {
+  background: #999;
+  color: white;
+}
+
+.checkout-btn {
+  background: #4CAF50;
+  color: white;
+}
+
+.checkout-btn:hover {
+  background: #45a049;
+}
+
+.clear-btn:hover {
+  background: #777;
+}
+
