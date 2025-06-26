@@ -334,7 +334,7 @@ body.dark-theme {
 /* styles cart */
 
 .body-frame {
-  front-family: sans-serif:
+  font-family: sans-serif:
   background: #f9f9f9;
   margin: 0;
   padding: 20px;
@@ -348,6 +348,7 @@ body.dark-theme {
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 20px;
 }
 .cart-item {
   display: flex;
