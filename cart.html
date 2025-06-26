@@ -26,7 +26,7 @@
       const grouped = {};
 
       rawItems.forEach(item => {
-        const key = item.title + "_" + item.size;
+        const key = `${item.title}_${item.size}_${item.image}`; // ✅ make key unique by item
         if (!grouped[key]) {
           grouped[key] = { ...item, qty: 1 };
         } else {
@@ -60,7 +60,7 @@
             <p>Qty: ${item.qty}</p>
           </div>
           <div class="item-actions">
-            <button onclick="removeItem('${item.title}', '${item.size}')">🗑️ Delete</button>
+            <button onclick="removeItem('${item.title}', '${item.size}', '${item.image}')">🗑️ Delete</button>
           </div>
         `;
         cartContainer.appendChild(itemEl);
@@ -72,13 +72,13 @@
       cartContainer.appendChild(totalEl);
     }
 
-    function removeItem(title, size) {
+    function removeItem(title, size, image) {
       const rawItems = JSON.parse(localStorage.getItem("cartItems")) || [];
       const newItems = [];
-      let removed = false;
 
+      let removed = false;
       for (let i = 0; i < rawItems.length; i++) {
-        if (rawItems[i].title === title && rawItems[i].size === size && !removed) {
+        if (rawItems[i].title === title && rawItems[i].size === size && rawItems[i].image === image && !removed) {
           removed = true;
         } else {
           newItems.push(rawItems[i]);
@@ -99,8 +99,7 @@
     }
 
     function checkout() {
-      alert("Checkout process would start here.");
-      // Redirect or further logic can be added
+      alert("Checkout process would start here. You can add redirect logic here.");
     }
 
     function updateCartCount() {
