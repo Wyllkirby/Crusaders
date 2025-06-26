@@ -1,23 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Your Cart - Crusaders</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body class="body-frame">
   <button onclick="history.back()" class="back-btn">← Back</button>
-
   <h1 class="h1-f">Your Cart</h1>
 
   <main class="cart-container" id="cart-container"></main>
 
+  <div class="cart-actions" id="cart-actions" style="display: none;">
+    <button class="clear-btn" onclick="clearCart()">🧹 Clear Cart</button>
+    <button class="checkout-btn" onclick="checkout()">🛒 Checkout</button>
+  </div>
+
   <script>
     function loadCart() {
       const cartContainer = document.getElementById('cart-container');
+      const actionBtns = document.getElementById('cart-actions');
       const rawItems = JSON.parse(localStorage.getItem("cartItems")) || [];
       const grouped = {};
 
@@ -34,9 +38,11 @@
 
       if (items.length === 0) {
         cartContainer.innerHTML = `<div class="empty-cart">Your cart is currently empty.</div>`;
+        actionBtns.style.display = "none";
         return;
       }
 
+      actionBtns.style.display = "flex";
       let total = 0;
       cartContainer.innerHTML = "";
 
@@ -69,8 +75,8 @@
     function removeItem(title, size) {
       const rawItems = JSON.parse(localStorage.getItem("cartItems")) || [];
       const newItems = [];
-
       let removed = false;
+
       for (let i = 0; i < rawItems.length; i++) {
         if (rawItems[i].title === title && rawItems[i].size === size && !removed) {
           removed = true;
@@ -84,6 +90,19 @@
       loadCart();
     }
 
+    function clearCart() {
+      if (confirm("Are you sure you want to clear the cart?")) {
+        localStorage.removeItem("cartItems");
+        updateCartCount();
+        loadCart();
+      }
+    }
+
+    function checkout() {
+      alert("Checkout process would start here.");
+      // Redirect or further logic can be added
+    }
+
     function updateCartCount() {
       const newCount = JSON.parse(localStorage.getItem("cartItems"))?.length || 0;
       const countElement = document.getElementById("cart-count");
@@ -95,5 +114,4 @@
     loadCart();
   </script>
 </body>
-
 </html>
