@@ -117,15 +117,21 @@
       cartItems.push(newItem);
       localStorage.setItem("cartItems", JSON.stringify(cartItems));
       updateCartDisplay();
-      alert("Added to cart!");
+      alert(`Added ${productTitle} (Size: ${selectedSize}) to cart!`);
     });
+
     document.querySelector(".buy-now").addEventListener("click", () => {
       if (!selectedSize) {
         alert("Please select a size before buying.");
         return;
       }
-      alert(`Buying 1 x ${productTitle} (Size: ${selectedSize})`);
+
+      const productTitle = document.querySelector(".product-title").textContent;
+      const productPrice = parseFloat(document.querySelector(".product-price").dataset.price);
+      
+      alert(`Buying 1 x ${productTitle} (Size: ${selectedSize}) for $${productPrice.toFixed(2)}.`);
     });
+
   </script>
 </body>
 
