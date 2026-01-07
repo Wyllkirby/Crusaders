@@ -19,98 +19,115 @@
   </div>
 
   <script>
-    function loadCart() {
-      const cartContainer = document.getElementById('cart-container');
-      const actionBtns = document.getElementById('cart-actions');
-      const rawItems = JSON.parse(localStorage.getItem("cartItems")) || [];
-      const grouped = {};
+  function loadCart() {
+    const cartContainer = document.getElementById('cart-container');
+    const actionBtns = document.getElementById('cart-actions');
+    const rawItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+    const grouped = {};
 
-      rawItems.forEach(item => {
-        const key = `${item.title}_${item.size}_${item.image}`; // ✅ make key unique by item
-        if (!grouped[key]) {
-          grouped[key] = { ...item, qty: 1 };
-        } else {
-          grouped[key].qty++;
-        }
-      });
-
-      const items = Object.values(grouped);
-
-      if (items.length === 0) {
-        cartContainer.innerHTML = `<div class="empty-cart">Your cart is currently empty.</div>`;
-        actionBtns.style.display = "none";
-        return;
+    rawItems.forEach(item => {
+      const key = `${item.title}_${item.size}_${item.image}`; // ✅ make key unique by item
+      if (!grouped[key]) {
+        grouped[key] = { ...item, qty: 1 };
+      } else {
+        grouped[key].qty++;
       }
+    });
 
-      actionBtns.style.display = "flex";
-      let total = 0;
-      cartContainer.innerHTML = "";
+    const items = Object.values(grouped);
 
-      items.forEach(item => {
-        total += item.qty * item.price;
-
-        const itemEl = document.createElement("div");
-        itemEl.className = "cart-item";
-        itemEl.innerHTML = `
-          <img src="${item.image}" alt="${item.title}" />
-          <div class="item-details">
-            <p><strong>${item.title}</strong></p>
-            <p>Size: ${item.size}</p>
-            <p>Price: $${item.price.toFixed(2)}</p>
-            <p>Qty: ${item.qty}</p>
-          </div>
-          <div class="item-actions">
-            <button onclick="removeItem('${item.title}', '${item.size}', '${item.image}')">🗑️ Delete</button>
-          </div>
-        `;
-        cartContainer.appendChild(itemEl);
-      });
-
-      const totalEl = document.createElement("div");
-      totalEl.className = "total";
-      totalEl.textContent = `Total: $${total.toFixed(2)}`;
-      cartContainer.appendChild(totalEl);
+    if (items.length === 0) {
+      cartContainer.innerHTML = `<div class="empty-cart">Your cart is currently empty.</div>`;
+      actionBtns.style.display = "none";
+      return;
     }
 
-    function removeItem(title, size, image) {
-      const rawItems = JSON.parse(localStorage.getItem("cartItems")) || [];
-      const newItems = [];
+    actionBtns.style.display = "flex";
+    let total = 0;
+    cartContainer.innerHTML = "";
 
-      let removed = false;
-      for (let i = 0; i < rawItems.length; i++) {
-        if (rawItems[i].title === title && rawItems[i].size === size && rawItems[i].image === image && !removed) {
-          removed = true;
-        } else {
-          newItems.push(rawItems[i]);
-        }
+    items.forEach(item => {
+      total += item.qty * item.price;
+
+      const itemEl = document.createElement("div");
+      itemEl.className = "cart-item";
+      itemEl.innerHTML = `
+        <img src="${item.image}" alt="${item.title}" />
+        <div class="item-details">
+          <p><strong>${item.title}</strong></p>
+          <p>Size: ${item.size}</p>
+          <p>Price: $${item.price.toFixed(2)}</p>
+          <p>Qty: ${item.qty}</p>
+        </div>
+        <div class="item-actions">
+          <button onclick="removeItem('${item.title}', '${item.size}', '${item.image}')">🗑️ Delete</button>
+        </div>
+      `;
+      cartContainer.appendChild(itemEl);
+    });
+
+    const totalEl = document.createElement("div");
+    totalEl.className = "total";
+    totalEl.textContent = `Total: $${total.toFixed(2)}`;
+    cartContainer.appendChild(totalEl);
+  }
+
+  function removeItem(title, size, image) {
+    const rawItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+    const newItems = [];
+
+    let removed = false;
+    for (let i = 0; i < rawItems.length; i++) {
+      if (rawItems[i].title === title && rawItems[i].size === size && rawItems[i].image === image && !removed) {
+        removed = true;
+      } else {
+        newItems.push(rawItems[i]);
       }
+    }
 
-      localStorage.setItem("cartItems", JSON.stringify(newItems));
+    localStorage.setItem("cartItems", JSON.stringify(newItems));
+    updateCartCount();
+    loadCart();
+  }
+
+  function clearCart() {
+    if (confirm("Are you sure you want to clear the cart?")) {
+      localStorage.removeItem("cartItems");
       updateCartCount();
       loadCart();
     }
+  }
 
-    function clearCart() {
-      if (confirm("Are you sure you want to clear the cart?")) {
-        localStorage.removeItem("cartItems");
-        updateCartCount();
-        loadCart();
-      }
+  // UPDATED checkout() -> clears cart after confirming checkout and updates UI
+  function checkout() {
+    const cart = JSON.parse(localStorage.getItem("cartItems")) || [];
+    if (cart.length === 0) {
+      alert("Your cart is empty.");
+      return;
     }
 
-    function checkout() {
-      alert("Checkout process would start here. Thank you for buying at Crusaders Merch Shop!.");
+    // Optional: confirm before finalizing checkout
+    if (!confirm("Proceed to checkout? This will place your order and clear the cart.")) {
+      return;
     }
 
-    function updateCartCount() {
-      const newCount = JSON.parse(localStorage.getItem("cartItems"))?.length || 0;
-      const countElement = document.getElementById("cart-count");
-      if (countElement) {
-        countElement.textContent = newCount;
-      }
-    }
-
+    // Simulate checkout success, clear cart, update UI
+    alert("Checkout successful — thank you for buying at Crusaders Merch Shop!");
+    localStorage.removeItem("cartItems");
+    updateCartCount();
     loadCart();
-  </script>
+  }
+
+  function updateCartCount() {
+    const newCount = JSON.parse(localStorage.getItem("cartItems"))?.length || 0;
+    const countElement = document.getElementById("cart-count");
+    if (countElement) {
+      countElement.textContent = newCount;
+    }
+  }
+
+  loadCart();
+</script>
 </body>
 </html>
+
